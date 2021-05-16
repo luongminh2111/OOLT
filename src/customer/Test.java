@@ -1,12 +1,12 @@
 package customer;
 import object.Calculate;
-
 import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) {
         Calculate object = new Calculate();
         String s;
+        Camera camera =new Camera();
         Scanner input = new Scanner(System.in);
         System.out.println("Enter the size of room : ");
         s = input.nextLine();
@@ -31,6 +31,10 @@ public class Test {
                     }
                 }
             }
+            System.out.println("Enter Cam");
+            String cam= input.nextLine();
+            System.out.println(camera.checkCamare(object.objectsList.get(0), cam));
+
         }
         else {
             System.out.println("Invalid! Try again.");
