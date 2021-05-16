@@ -1,4 +1,7 @@
 package object;
+
+import customer.Camera;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -110,13 +113,6 @@ public class Calculate extends Characteristics {
         return (square * distance) / 3;
     }
     // tinh the tich can phong
-//    public double volumeOfRoom(int index)
-//    {
-//        double with = distancePointAB(objectsList.get(index).getPointA(), objectsList.get(index).getPointB());
-//        double lenght = distancePointAB(objectsList.get(index).getPointA(), objectsList.get(index).getPointD());
-//        double height = distancePointAB(objectsList.get(index).getPointA(), objectsList.get(index).getPointA1());
-//        return with * lenght * height;
-//    }
     public double volumeOfObject( Calculate obj, int indexObj)
     {
         double width = distancePointAB(obj.objectsList.get(indexObj).getPointA(), obj.objectsList.get(indexObj).getPointB());
@@ -125,24 +121,24 @@ public class Calculate extends Characteristics {
         return  width * length * height;
     }
     // tinh tong the tich 6 hinh chop
-    public double sumOfVolume( Cordination pointM)
+    public double sumOfVolume( Calculate obj, int index, Cordination pointM)
     {
-        double volumeM1 = pyramidVolume(objectsList.get(0).getPointA(), objectsList.get(0).getPointB(), objectsList.get(0).getPointC(), pointM);
-        double volumeM2 = pyramidVolume(objectsList.get(0).getPointA(), objectsList.get(0).getPointB(), objectsList.get(0).getPointB1(), pointM);
-        double volumeM3 = pyramidVolume(objectsList.get(0).getPointA(), objectsList.get(0).getPointD(), objectsList.get(0).getPointD1(), pointM);
-        double volumeM4 = pyramidVolume(objectsList.get(0).getPointB1(), objectsList.get(0).getPointB(), objectsList.get(0).getPointC(), pointM);
-        double volumeM5 = pyramidVolume(objectsList.get(0).getPointA1(), objectsList.get(0).getPointB1(), objectsList.get(0).getPointC1(), pointM);
-        double volumeM6 = pyramidVolume(objectsList.get(0).getPointC(), objectsList.get(0).getPointD(), objectsList.get(0).getPointD1(), pointM);
+        double volumeM1 = pyramidVolume(obj.objectsList.get(index).getPointA(), obj.objectsList.get(index).getPointB(), obj.objectsList.get(index).getPointC(), pointM);
+        double volumeM2 = pyramidVolume(obj.objectsList.get(index).getPointA(), obj.objectsList.get(index).getPointB(), obj.objectsList.get(index).getPointB1(), pointM);
+        double volumeM3 = pyramidVolume(obj.objectsList.get(index).getPointA(), obj.objectsList.get(index).getPointD(), obj.objectsList.get(index).getPointD1(), pointM);
+        double volumeM4 = pyramidVolume(obj.objectsList.get(index).getPointB1(), obj.objectsList.get(index).getPointB(), obj.objectsList.get(index).getPointC(), pointM);
+        double volumeM5 = pyramidVolume(obj.objectsList.get(index).getPointA1(), obj.objectsList.get(index).getPointB1(), obj.objectsList.get(index).getPointC1(), pointM);
+        double volumeM6 = pyramidVolume(obj.objectsList.get(index).getPointC(), obj.objectsList.get(index).getPointD(), obj.objectsList.get(index).getPointD1(), pointM);
         return volumeM1 + volumeM2 + volumeM3 + volumeM4 + volumeM5 + volumeM6;
     }
     // kiem tra xem vat co ton tai trong danh sach khong
 
     // kiem tra xem vat co nam o tren san nha khong?
     // quy uoc OXY la mat phang san nha
-    public double checkOnPlane(Cordination pointM)
+    public double checkOnPlane(Calculate obj, int index, Cordination pointM)
     {
-        Cordination vectorN = makeVectorN(objectsList.get(0).getPointA(), objectsList.get(0).getPointB(), objectsList.get(0).getPointC());
-        return distance(pointM, vectorN, objectsList.get(0).getPointA());
+        Cordination vectorN = makeVectorN(obj.objectsList.get(index).getPointA(), obj.objectsList.get(index).getPointB(), obj.objectsList.get(index).getPointC());
+        return distance(pointM, vectorN, obj.objectsList.get(index).getPointA());
     }
     //check 1 diem thuoc mot khung mat phang gioi han cho truoc hay khong
     // thuat toan xet su cung phia voi 4 duong thang xac dinh mat phang gioi han
@@ -188,68 +184,158 @@ public class Calculate extends Characteristics {
         }
     }
     // check cac vat co nam chong len nhau hay khong
-    public void checkInObject( Cordination point, Calculate obj, int indexCurrentObj)
-    {
-        // y tuong la xet vi tri tuong doi cua diem can xet den tam cua hhcn, neu dong thoi cung phia voi 12 canh cua hhcn thi diem do nam trong vat
-        // lay tam cua hhcn cac vat con lai va xet
-        for(int i = 1 ; i < obj.objectsList.size() ; i++ ) {
-            if( i == indexCurrentObj)
-            {
-                continue;
-            }
-            double ab = Math.round(distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointB()));
-            double ad = Math.round(distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointD()));
-            double ac = Math.round(distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointC()));
-
-            double xAB = obj.objectsList.get(i).getPointB().getX() - obj.objectsList.get(i).getPointA().getX();
-            double yAB = obj.objectsList.get(i).getPointB().getY() - obj.objectsList.get(i).getPointA().getY();
-            double zAB = obj.objectsList.get(i).getPointB().getZ() - obj.objectsList.get(i).getPointA().getZ();
-            Cordination AB = new Cordination(xAB, yAB, zAB);
-            Map pointAB = new Map(ab, AB.getX(), AB.getY(), AB.getZ());
-
-            double xAD = obj.objectsList.get(i).getPointD().getX() - obj.objectsList.get(i).getPointA().getX();
-            double yAD = obj.objectsList.get(i).getPointD().getY() - obj.objectsList.get(i).getPointA().getY();
-            double zAD = obj.objectsList.get(i).getPointD().getZ() - obj.objectsList.get(i).getPointA().getZ();
-            Cordination AD = new Cordination(xAD, yAD, zAD);
-            Map pointAD = new Map(ad, AD.getX(), AD.getY(), AD.getZ());
-
-            double xAC = obj.objectsList.get(i).getPointC().getX() - obj.objectsList.get(i).getPointA().getX();
-            double yAC = obj.objectsList.get(i).getPointC().getY() - obj.objectsList.get(i).getPointA().getY();
-            double zAC = obj.objectsList.get(i).getPointC().getZ() - obj.objectsList.get(i).getPointA().getZ();
-            Cordination AC = new Cordination(xAC, yAC, zAC);
-            Map pointAC = new Map(ac, AC.getX(), AC.getY(), AC.getZ());
-
-            List<Map> listP = new ArrayList<>();
-            listP.add(pointAB);
-            listP.add(pointAC);
-            listP.add(pointAD);
-            sort(listP);
-
-            // tinh chieu cao cua vat the
-            double height = distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointA1());
-
-            // lay tam cua hhcn
-            Cordination center = new Cordination();
-            center.setX(listP.get(2).getX() / 2);
-            center.setY(listP.get(2).getY() / 2);
-            center.setZ(listP.get(2).getZ() / 2 + height / 2);
-
-//            boolean check1 = checkRelativeObject(center, point, objectsList.get(i).getPointA(), objectsList.get(i).getPointB());
-//            boolean check2 = checkRelativeObject(center, point, objectsList.get(i).getPointA(), objectsList.get(i).getPointD());
-//            boolean check3 = checkRelativeObject(center, point, objectsList.get(i).getPointB(), objectsList.get(i).getPointC());
-//            boolean check4 = checkRelativeObject(center, point, objectsList.get(i).getPointC(), objectsList.get(i).getPointD());
-//            boolean check5 = checkRelativeObject(center, point, objectsList.get(i).getPointA(), objectsList.get(i).getPointA1());
-//            boolean check6 = checkRelativeObject(center, point, objectsList.get(i).getPointB(), objectsList.get(i).getPointB1());
-//            boolean check7 = checkRelativeObject(center, point, objectsList.get(i).getPointC(), objectsList.get(i).getPointC1());
-//            boolean check8 = checkRelativeObject(center, point, objectsList.get(i).getPointD1(), objectsList.get(i).getPointD1());
-//            boolean check9 = checkRelativeObject(center, point, objectsList.get(i).getPointA1(), objectsList.get(i).getPointB1());
-//            boolean check10 = checkRelativeObject(center, point, objectsList.get(i).getPointA1(), objectsList.get(i).getPointD1());
-//            boolean check11 = checkRelativeObject(center, point, objectsList.get(i).getPointB1(), objectsList.get(i).getPointC1());
-//            boolean check12 = checkRelativeObject(center, point, objectsList.get(i).getPointC1(), objectsList.get(i).getPointD1());
-
-        }
-
-    }
+//    public boolean checkInObject(Calculate obj, int indexCurrentObj)
+//    {
+//        // y tuong la xet vi tri tuong doi cua diem can xet den tam cua hhcn, neu dong thoi cung phia voi 12 canh cua hhcn thi diem do nam trong vat
+//        // lay tam cua hhcn cac vat con lai va xet
+////        for(int i = 1 ; i < obj.objectsList.size() ; i++ ) {
+////            if( i == indexCurrentObj)
+////            {
+////                continue;
+////            }
+////            double ab = Math.round(distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointB()));
+////            double ad = Math.round(distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointD()));
+////            double ac = Math.round(distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointC()));
+////
+////            double xAB = obj.objectsList.get(i).getPointB().getX() - obj.objectsList.get(i).getPointA().getX();
+////            double yAB = obj.objectsList.get(i).getPointB().getY() - obj.objectsList.get(i).getPointA().getY();
+////            double zAB = obj.objectsList.get(i).getPointB().getZ() - obj.objectsList.get(i).getPointA().getZ();
+////            Cordination AB = new Cordination(xAB, yAB, zAB);
+////            Map pointAB = new Map(ab, AB.getX(), AB.getY(), AB.getZ());
+////
+////            double xAD = obj.objectsList.get(i).getPointD().getX() - obj.objectsList.get(i).getPointA().getX();
+////            double yAD = obj.objectsList.get(i).getPointD().getY() - obj.objectsList.get(i).getPointA().getY();
+////            double zAD = obj.objectsList.get(i).getPointD().getZ() - obj.objectsList.get(i).getPointA().getZ();
+////            Cordination AD = new Cordination(xAD, yAD, zAD);
+////            Map pointAD = new Map(ad, AD.getX(), AD.getY(), AD.getZ());
+////
+////            double xAC = obj.objectsList.get(i).getPointC().getX() - obj.objectsList.get(i).getPointA().getX();
+////            double yAC = obj.objectsList.get(i).getPointC().getY() - obj.objectsList.get(i).getPointA().getY();
+////            double zAC = obj.objectsList.get(i).getPointC().getZ() - obj.objectsList.get(i).getPointA().getZ();
+////            Cordination AC = new Cordination(xAC, yAC, zAC);
+////            Map pointAC = new Map(ac, AC.getX(), AC.getY(), AC.getZ());
+////
+////            List<Map> listP = new ArrayList<>();
+////            listP.add(pointAB);
+////            listP.add(pointAC);
+////            listP.add(pointAD);
+////            sort(listP);
+////
+////            // tinh chieu cao cua vat the
+////            double height = distancePointAB(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointA1());
+////
+////            // lay tam cua hhcn
+////            Cordination center = new Cordination();
+////            center.setX(listP.get(2).getX() / 2);
+////            center.setY(listP.get(2).getY() / 2);
+////            center.setZ(listP.get(2).getZ() / 2 + height / 2);
+////        }
+//        for( int i = 1 ; i< obj.objectsList.size() ; i++)
+//        {
+//            if( i == indexCurrentObj)
+//            {
+//                continue;
+//            }
+//            double sum1 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointA()));
+//            double sum2 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointB()));
+//            double sum3 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointC()));
+//            double sum4 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointD()));
+//            double sum5 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointA1()));
+//            double sum6 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointB1()));
+//            double sum7 = Math.round(sumOfVolume(obj, i, obj.objectsList.get(indexCurrentObj).getPointC1()));
+//            double sum8 = Math.round(sumOfVolume(obj, i ,obj.objectsList.get(indexCurrentObj).getPointD1()));
+//
+//            // y tuong la tinh tong the tich cac phan tu mot diem den casi dinh bang the tich vua vat va khoang cach tu diem do den motj trong cac majt toi da 4 diem la 0
+//            Cordination vectorAA1B = obj.makeVectorN(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointA1(), obj.objectsList.get(i).getPointB());
+//            Cordination vectorAA1D = obj.makeVectorN(obj.objectsList.get(i).getPointA(), obj.objectsList.get(i).getPointA1(), obj.objectsList.get(i).getPointD());
+//            Cordination vectorA1B1C1 = obj.makeVectorN(obj.objectsList.get(i).getPointA1(), obj.objectsList.get(i).getPointB1(), obj.objectsList.get(i).getPointC1());
+//            Cordination vectorDD1C = obj.makeVectorN(obj.objectsList.get(i).getPointD(), obj.objectsList.get(i).getPointD1(), obj.objectsList.get(i).getPointC());
+//            Cordination vectorBB1C = obj.makeVectorN(obj.objectsList.get(i).getPointB(), obj.objectsList.get(i).getPointB1(), obj.objectsList.get(i).getPointC());
+//
+//            int count = 0 ;
+//            if(sum1 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointA(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum2 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointB(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum3 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointC(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum4 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointD(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum5 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointA1(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA1(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA1(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA1(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointA1(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum6 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointB1(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB1(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB1(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB1(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointB1(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum7 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointC1(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC1(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC1(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC1(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointC1(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if(sum8 == volumeOfObject(obj, i)) {
+//                if (distance(obj.objectsList.get(indexCurrentObj).getPointD1(), vectorAA1B, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD1(), vectorAA1D, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD1(), vectorA1B1C1, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD1(), vectorDD1C, obj.objectsList.get(i).getPointA()) == 0
+//                        || distance(obj.objectsList.get(indexCurrentObj).getPointD1(), vectorBB1C, obj.objectsList.get(i).getPointA()) == 0) {
+//                    count ++ ;
+//                }
+//            }
+//            if( count <= 4)
+//            {
+//                System.out.println("co test vao day ");
+//                return true;
+//            }
+//            else {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
     public int checkPointOnSurface(Cordination point, int indexCheckObj){
         // lay toa do trung diem cua duong cheo hinh hop chu nhat nam duoi
         List<Double> list = new ArrayList<>();
@@ -314,21 +400,24 @@ public class Calculate extends Characteristics {
     public int checkInRoom( Calculate object, int index)
     {
        // System.out.println(" size : "+object.objectsList.size());
-            double sum1 = Math.round(sumOfVolume(object.objectsList.get(index).getPointA()));
-            double sum2 = Math.round(sumOfVolume(object.objectsList.get(index).getPointB()));
-            double sum3 = Math.round(sumOfVolume(object.objectsList.get(index).getPointC()));
-            double sum4 = Math.round(sumOfVolume(object.objectsList.get(index).getPointD()));
-            double sum5 = Math.round(sumOfVolume(object.objectsList.get(index).getPointA1()));
-            double sum6 = Math.round(sumOfVolume(object.objectsList.get(index).getPointB1()));
-            double sum7 = Math.round(sumOfVolume(object.objectsList.get(index).getPointC1()));
-            double sum8 = Math.round(sumOfVolume(object.objectsList.get(index).getPointD1()));
+            double sum1 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointA()));
+            double sum2 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointB()));
+            double sum3 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointC()));
+            double sum4 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointD()));
+            double sum5 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointA1()));
+            double sum6 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointB1()));
+            double sum7 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointC1()));
+            double sum8 = Math.round(sumOfVolume(object, 0 , object.objectsList.get(index).getPointD1()));
 
-            if (sum1 == volumeOfObject(object, 0) && sum2 == volumeOfObject(object, 0) && sum3 == volumeOfObject() && sum4 == volumeOfObject() && sum5 == volumeOfRoom()
-                && sum6 == volumeOfObject() && sum7 == volumeOfObject() && sum8 == volumeOfObject()) {
+            if (sum1 == volumeOfObject(object, 0) && sum2 == volumeOfObject(object, 0) && sum3 == volumeOfObject(object, 0)
+                    && sum4 == volumeOfObject(object, 0) && sum5 == volumeOfObject(object, 0)
+                && sum6 == volumeOfObject(object, 0) && sum7 == volumeOfObject(object, 0) && sum8 == volumeOfObject(object, 0)) {
                 // xet vat nam tren san nha
                // System.out.println(" vao day lan 1");
-                if(checkOnPlane(object.objectsList.get(index).getPointA()) == 0 && checkOnPlane(object.objectsList.get(index).getPointB()) == 0 &&
-                        checkOnPlane(object.objectsList.get(index).getPointC()) == 0 && checkOnPlane(object.objectsList.get(index).getPointD()) == 0)
+                if(checkOnPlane(object,0, object.objectsList.get(index).getPointA()) == 0
+                        && checkOnPlane(object, 0, object.objectsList.get(index).getPointB()) == 0 &&
+                        checkOnPlane(object, 0, object.objectsList.get(index).getPointC()) == 0
+                        && checkOnPlane(object, 0, object.objectsList.get(index).getPointD()) == 0)
                 {
                    // System.out.println(" check A1 :" + checkPointOnFloor(object.objectsList.get(i).getPointA()));
                     if(checkPointOnFloor(object.objectsList.get(index).getPointA()) == 1 && checkPointOnFloor(object.objectsList.get(index).getPointB()) == 1
@@ -668,18 +757,30 @@ public class Calculate extends Characteristics {
         object.pointA.setX(listDistance.get(0).getX());
         object.pointA.setY(listDistance.get(0).getY());
         object.pointA.setZ(listDistance.get(0).getZ());
+//        System.out.println("A "+ listDistance.get(0).getX());
+//        System.out.println("A "+ listDistance.get(0).getY());
+//        System.out.println("A "+ listDistance.get(0).getZ());
         // diem B
         object.pointB.setX(listDistance.get(1).getX());
         object.pointB.setY(listDistance.get(1).getY());
         object.pointB.setZ(listDistance.get(1).getZ());
+//        System.out.println("B "+ listDistance.get(1).getX());
+//        System.out.println("B "+ listDistance.get(1).getY());
+//        System.out.println("B "+ listDistance.get(1).getZ());
         // diem C
         object.pointC.setX(listDistance.get(2).getX());
         object.pointC.setY(listDistance.get(2).getY());
         object.pointC.setZ(listDistance.get(2).getZ());
+//        System.out.println("C "+ listDistance.get(2).getX());
+//        System.out.println("C "+ listDistance.get(2).getY());
+//        System.out.println("C "+ listDistance.get(2).getZ());
         // diem D
         object.pointD.setX(listDistance.get(3).getX());
         object.pointD.setY(listDistance.get(3).getY());
         object.pointD.setZ(listDistance.get(3).getZ());
+//        System.out.println("D "+ listDistance.get(3).getX());
+//        System.out.println("D "+ listDistance.get(3).getY());
+//        System.out.println("D "+ listDistance.get(3).getZ());
 
         // lay ra cac diem A1 B1 C1 D1 thong qua cac diem A B C D
         for (i = 4; i < listP.size(); i++) {
@@ -688,28 +789,42 @@ public class Calculate extends Characteristics {
                 object.getPointA1().setX(listP.get(i).getX());
                 object.getPointA1().setY(listP.get(i).getY());
                 object.getPointA1().setZ(listP.get(i).getZ());
+                System.out.println( " A1 : "+ listP.get(i).getX());
+                System.out.println( " A1 : "+ listP.get(i).getY());
+                System.out.println( " A1 : "+ listP.get(i).getZ());
+
             }
             if (object.getPointB().getX() == listP.get(i).getX() && object.getPointB().getY() == listP.get(i).getY()
                     && object.getPointB().getZ() != listP.get(i).getZ()) {
                 object.getPointB1().setX(listP.get(i).getX());
                 object.getPointB1().setY(listP.get(i).getY());
                 object.getPointB1().setZ(listP.get(i).getZ());
+                System.out.println( " B1 : "+ listP.get(i).getX());
+                System.out.println( " B1 : "+ listP.get(i).getY());
+                System.out.println( " B1 : "+ listP.get(i).getZ());
             }
             if (object.getPointC().getX() == listP.get(i).getX() && object.getPointC().getY() == listP.get(i).getY()
                     && object.getPointC().getZ() != listP.get(i).getZ()) {
                 object.getPointC1().setX(listP.get(i).getX());
                 object.getPointC1().setY(listP.get(i).getY());
                 object.getPointC1().setZ(listP.get(i).getZ());
+                System.out.println( " C1 : "+ listP.get(i).getX());
+                System.out.println( " C1 : "+ listP.get(i).getY());
+                System.out.println( " C1 : "+ listP.get(i).getZ());
             }
             if (object.getPointD().getX() == listP.get(i).getX() && object.getPointD().getY() == listP.get(i).getY()
                     && object.getPointD().getZ() != listP.get(i).getZ()) {
                 object.getPointD1().setX(listP.get(i).getX());
                 object.getPointD1().setY(listP.get(i).getY());
                 object.getPointD1().setZ(listP.get(i).getZ());
+                System.out.println( " D1 : "+ listP.get(i).getX());
+                System.out.println( " D1 : "+ listP.get(i).getY());
+                System.out.println( " D1 : "+ listP.get(i).getZ());
             }
         }
-
-        if (object.getPointA1() == null || object.getPointB1() == null || object.getPointC1() == null || object.getPointD1() == null) {
+        double Z = object.getPointA().getZ();
+        if ( Z <= 0 || object.getPointB1().getZ() != Z && object.getPointC1().getZ() != Z && object.getPointD1().getZ() != Z ) {
+            System.out.println( " vao day hay khong noi mot loi");
             return false;
         } else {
             System.out.println(" da zo day thu lan 0");
@@ -722,11 +837,25 @@ public class Calculate extends Characteristics {
                 if(check == 1) {
                     System.out.println(" vat nay dung that la nam tren san roi");
                     return true;
+//                    if(checkInObject(obj, index))
+//                    {
+//                        return true;
+//                    }
+//                    else {
+//                        return false;
+//                    }
                 }
                 else if(check == 2)
                 {
                     System.out.println(" vat nay nam tren vat khac");
                     return true;
+//                    if(checkInObject(obj, index))
+//                    {
+//                        return true;
+//                    }
+//                    else {
+//                        return false;
+//                    }
                 }
                 else {
                     obj.objectsList.remove(object);
@@ -738,5 +867,9 @@ public class Calculate extends Characteristics {
                 return false;
             }
         }
+    }
+    public boolean checkPointInCamera(Cordination point , Camera camera)
+    {
+        return true;
     }
 }

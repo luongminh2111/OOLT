@@ -1,13 +1,10 @@
 package object;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Characteristics {
     protected double length;
     protected double width;
     protected double height;
-//    public List<Characteristics> objectsList = new ArrayList<>();
+
     public void setWidth(double width) {
         this.width = width;
     }
