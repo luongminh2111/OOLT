@@ -92,4 +92,36 @@ public class Characteristics {
     public double getHeight() {
         return height;
     }
+
+    public void setPointB(Cordination pointB) {
+        this.pointB = pointB ;
+    }
+
+    public void setPointC(Cordination pointC) {
+        this.pointC = pointC;
+    }
+
+    public void setPointA(Cordination pointA) {
+        this.pointA = pointA;
+    }
+
+    public void setPointA1(Cordination pointA1) {
+        this.pointA1 = pointA1;
+    }
+
+    public void setPointB1(Cordination pointB1) {
+        this.pointB1 = pointB1;
+    }
+
+    public void setPointC1(Cordination pointC1) {
+        this.pointC1 = pointC1;
+    }
+
+    public void setPointD1(Cordination pointD1) {
+        this.pointD1 = pointD1;
+    }
+
+    public void setPointD(Cordination pointD) {
+        this.pointD = pointD;
+    }
 }

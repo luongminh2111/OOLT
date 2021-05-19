@@ -80,15 +80,15 @@ public class Calculate extends Characteristics {
     public double distancePointAB(Cordination pointA, Cordination pointB)
     {
         return Math.abs(Math.sqrt(Math.pow((pointB.getX()) - pointA.getX(), 2) + Math.pow(pointB.getY() - pointA.getY(), 2)
-        + Math.pow(pointB.getZ() - pointA.getZ(), 2)));
+                + Math.pow(pointB.getZ() - pointA.getZ(), 2)));
     }
     // tinh khoang cach tu mot diem nam ngoai mat phang den mat phang do
     // K la diem thuoc mat phang cho truoc
     public double distance(Cordination pointM, Cordination vectorN, Cordination pointK)
     {
         return Math.abs((pointM.getX() * vectorN.getX())+ (pointM.getY() * vectorN.getY()) + (pointM.getZ() * vectorN.getZ())
-                 +((vectorN.getX() * pointK.getX()) + (vectorN.getY() * pointK.getY()) + vectorN.getZ() * pointK.getZ()) * (-1))
-                 / (Math.sqrt(Math.pow(vectorN.getX(),2) + Math.pow(vectorN.getY(), 2) + Math.pow(vectorN.getZ(), 2)));
+                +((vectorN.getX() * pointK.getX()) + (vectorN.getY() * pointK.getY()) + vectorN.getZ() * pointK.getZ()) * (-1))
+                / (Math.sqrt(Math.pow(vectorN.getX(),2) + Math.pow(vectorN.getY(), 2) + Math.pow(vectorN.getZ(), 2)));
     }
     // khoang cach tu mot diem den mot duong thang
     public  double distanceLine( Cordination pointM, Cordination vectorN, Cordination pointK)
@@ -103,6 +103,15 @@ public class Calculate extends Characteristics {
         double XY = distancePointAB(pointX, pointY);
         double YZ = distancePointAB(pointY, pointZ);
         return XY * YZ;
+    }
+    public double triangle(Cordination pointX, Cordination pointY, Cordination pointZ)
+    {
+        double XY = distancePointAB(pointX, pointY);
+        double YZ = distancePointAB(pointY, pointZ);
+        double ZX = distancePointAB(pointZ, pointX);
+        double p = (XY + YZ + ZX )/2;
+
+        return Math.round(Math.sqrt(p*(p-XY)*(p-YZ)*(p-ZX))*100) / 100.0;
     }
     // tinhs the tich hinh chop tu giac
     public double pyramidVolume (Cordination pointX, Cordination pointY, Cordination pointZ, Cordination pointM)
@@ -399,97 +408,68 @@ public class Calculate extends Characteristics {
     // kiem tra xem vat co nam trong can phong khong?
     public int checkInRoom( Calculate object, int index)
     {
-       // System.out.println(" size : "+object.objectsList.size());
-            double sum1 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointA()));
-            double sum2 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointB()));
-            double sum3 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointC()));
-            double sum4 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointD()));
-            double sum5 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointA1()));
-            double sum6 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointB1()));
-            double sum7 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointC1()));
-            double sum8 = Math.round(sumOfVolume(object, 0 , object.objectsList.get(index).getPointD1()));
+        // System.out.println(" size : "+object.objectsList.size());
+        double sum1 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointA()));
+        double sum2 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointB()));
+        double sum3 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointC()));
+        double sum4 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointD()));
+        double sum5 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointA1()));
+        double sum6 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointB1()));
+        double sum7 = Math.round(sumOfVolume(object, 0, object.objectsList.get(index).getPointC1()));
+        double sum8 = Math.round(sumOfVolume(object, 0 , object.objectsList.get(index).getPointD1()));
 
-            if (sum1 == volumeOfObject(object, 0) && sum2 == volumeOfObject(object, 0) && sum3 == volumeOfObject(object, 0)
-                    && sum4 == volumeOfObject(object, 0) && sum5 == volumeOfObject(object, 0)
+        if (sum1 == volumeOfObject(object, 0) && sum2 == volumeOfObject(object, 0) && sum3 == volumeOfObject(object, 0)
+                && sum4 == volumeOfObject(object, 0) && sum5 == volumeOfObject(object, 0)
                 && sum6 == volumeOfObject(object, 0) && sum7 == volumeOfObject(object, 0) && sum8 == volumeOfObject(object, 0)) {
-                // xet vat nam tren san nha
-               // System.out.println(" vao day lan 1");
-                if(checkOnPlane(object,0, object.objectsList.get(index).getPointA()) == 0
-                        && checkOnPlane(object, 0, object.objectsList.get(index).getPointB()) == 0 &&
-                        checkOnPlane(object, 0, object.objectsList.get(index).getPointC()) == 0
-                        && checkOnPlane(object, 0, object.objectsList.get(index).getPointD()) == 0)
-                {
-                   // System.out.println(" check A1 :" + checkPointOnFloor(object.objectsList.get(i).getPointA()));
-                    if(checkPointOnFloor(object.objectsList.get(index).getPointA()) == 1 && checkPointOnFloor(object.objectsList.get(index).getPointB()) == 1
-                    && checkPointOnFloor(object.objectsList.get(index).getPointC()) == 1 && checkPointOnFloor(object.objectsList.get(index).getPointD()) == 1) {
-                      //  System.out.println(" vao check vat nam tren san");
-                        return 1;
-                    }
-//                    else {
-//                       // System.out.println("chim cut 2");
-//                        return -1;
-//                    }
-                }
-                // xet vat co nam tren mat vat khac hay khong?
-                else {
-                  //  System.out.println(" vao day check vat nam tren mat vat khac");
-                    for( int j = 1 ; j < object.objectsList.size() ; j++) {
-                        if (index == j) {
-                            continue;
-                        }
-                        // tao vectorN mat phang A1B1C1
-                        // list de luu cac diem nam tren be mat vat khac
-                        //ArrayList<Cordination> list = new ArrayList<>();
-                        // tao vector phap tuyen cua mat phang
-                        int count = 0;
-//                        System.out.println(" co vao day khong");
-//                        System.out.println(" J "+ object.objectsList.get(j).getPointA1().toString() +"  " +
-//                                object.objectsList.get(j).getPointB1().toString() + " "+ object.objectsList.get(j).getPointC1().toString());
-                        Cordination vectorN = makeVectorN(object.objectsList.get(j).getPointA1(), object.objectsList.get(j).getPointB1()
-                                , object.objectsList.get(j).getPointC1());
-//
-//                        System.out.println(" vector N : " +vectorN.toString());
-//                        System.out.println(" j point A1 "+ object.objectsList.get(j).getPointA1().toString());
-//                        System.out.println(" distance 1 : "+ distance(object.objectsList.get(index).getPointA(), vectorN, object.objectsList.get(j).getPointA1()));
-//                        System.out.println(" distance 2 : "+ distance(object.objectsList.get(index).getPointB(), vectorN, object.objectsList.get(j).getPointA1()));
-//                        System.out.println("distance 3 : "+ distance(object.objectsList.get(index).getPointC(), vectorN, object.objectsList.get(j).getPointA1()));
-                        if (distance(object.objectsList.get(index).getPointA(), vectorN, object.objectsList.get(j).getPointA1()) == 0 &&
-                                distance(object.objectsList.get(index).getPointB(), vectorN, object.objectsList.get(j).getPointA1()) == 0 &&
-                                distance(object.objectsList.get(index).getPointC(), vectorN, object.objectsList.get(j).getPointA1()) == 0) {
-//                            System.out.println(" vao day check ");
-//                            System.out.println(" point A : " + object.objectsList.get(index).getPointA().toString());
-//                            System.out.println(" point B : " + object.objectsList.get(index).getPointB().toString());
-//                            System.out.println(" point C: " + object.objectsList.get(index).getPointC().toString());
-//                            System.out.println(" point D : " + object.objectsList.get(index).getPointD().toString());
-                            if (checkPointOnSurface(object.objectsList.get(index).getPointA(), j) == 1) {
-                                count++;
-                                //System.out.println(" count 1 : "+ count);
-                            }
-                            if (checkPointOnSurface(object.objectsList.get(index).getPointB(), j) == 1) {
-                                count++;
-                              //  System.out.println(" count 2 : "+ count);
-                            }
-                            if (checkPointOnSurface(object.objectsList.get(index).getPointC(), j) == 1) {
-                                count++;
-                               // System.out.println(" count 3: "+ count);
-                            }
-                            if (checkPointOnSurface(object.objectsList.get(index).getPointD(), j) == 1) {
-                                count++;
-                               // System.out.println(" count 4 : "+ count);
-                            }
-                           // System.out.println(" count : "+ count);
-                            if (count >= 1 && count <= 4) {
-                                //System.out.println(" ok 10 lan");
-                                return 2;
-
-                            }
-                        }
-                    }
-                   // return -1;
-                    //System.out.println(" chim cut 1");
+            // xet vat nam tren san nha
+            // System.out.println(" vao day lan 1");
+            if(checkOnPlane(object,0, object.objectsList.get(index).getPointA()) == 0
+                    && checkOnPlane(object, 0, object.objectsList.get(index).getPointB()) == 0 &&
+                    checkOnPlane(object, 0, object.objectsList.get(index).getPointC()) == 0
+                    && checkOnPlane(object, 0, object.objectsList.get(index).getPointD()) == 0)
+            {
+                // System.out.println(" check A1 :" + checkPointOnFloor(object.objectsList.get(i).getPointA()));
+                if(checkPointOnFloor(object.objectsList.get(index).getPointA()) == 1 && checkPointOnFloor(object.objectsList.get(index).getPointB()) == 1
+                        && checkPointOnFloor(object.objectsList.get(index).getPointC()) == 1 && checkPointOnFloor(object.objectsList.get(index).getPointD()) == 1) {
+                    //  System.out.println(" vao check vat nam tren san");
+                    return 1;
                 }
             }
-       // System.out.println(" chim cut 0");
+            else {
+                //  System.out.println(" vao day check vat nam tren mat vat khac");
+                for( int j = 1 ; j < object.objectsList.size() ; j++) {
+                    if (index == j) {
+                        continue;
+                    }
+                    // tao vectorN mat phang A1B1C1
+                    // list de luu cac diem nam tren be mat vat khac
+                    //ArrayList<Cordination> list = new ArrayList<>();
+                    // tao vector phap tuyen cua mat phang
+                    int count = 0;
+                    Cordination vectorN = makeVectorN(object.objectsList.get(j).getPointA1(), object.objectsList.get(j).getPointB1()
+                            , object.objectsList.get(j).getPointC1());
+                    if (distance(object.objectsList.get(index).getPointA(), vectorN, object.objectsList.get(j).getPointA1()) == 0 &&
+                            distance(object.objectsList.get(index).getPointB(), vectorN, object.objectsList.get(j).getPointA1()) == 0 &&
+                            distance(object.objectsList.get(index).getPointC(), vectorN, object.objectsList.get(j).getPointA1()) == 0) {
+                        if (checkPointOnSurface(object.objectsList.get(index).getPointA(), j) == 1) {
+                            count++; }
+                        if (checkPointOnSurface(object.objectsList.get(index).getPointB(), j) == 1) {
+                            count++;
+                        }
+                        if (checkPointOnSurface(object.objectsList.get(index).getPointC(), j) == 1) {
+                            count++;
+                        }
+                        if (checkPointOnSurface(object.objectsList.get(index).getPointD(), j) == 1) {
+                            count++;
+                        }
+                        if (count >= 1 && count <= 4) {
+                            return 2;
+                        }
+                    }
+                }
+            }
+        }
+
         return -1;
     }
     private void sort(List<Map> listDistance) {
@@ -513,363 +493,390 @@ public class Calculate extends Characteristics {
         }
     }
 
-    public boolean checkRoom(String s) {
-        List<Double> list = new ArrayList<>();
-        List<Cordination> listP = new ArrayList<>();
-        int i = 0;
-        while (i < s.length()) {
-            int count = list.size();
-            if (s.charAt(i) == '(') {
-                int j = i;
-                while ((j < s.length()) && (s.charAt(j) != ')')) {
-                    if (s.charAt(j) == ',') {
-                        String x = s.substring(i + 1, j);
-                        try {
-                            double so = Double.parseDouble(x);
-                            if (so < 0) {
-                                System.out.println("Error, the value must be positive .");
-                                return false;
-                            } else {
-                                i = j + 1;
-                                list.add(so);
-                            }
-                        } catch (Exception NumberFormatException) {
-                            System.out.println("Error coordination! ");
-                            return false;
-                        }
-                    } else if ((s.charAt(j + 1) == ')')) {
-                        if (j + 2 >= s.length()) {
-                            String x = s.substring(i + 1, j + 1);
-                            try {
-                                double so = Double.parseDouble(x);
-                                if (so < 0) {
-                                    System.out.println("Error, the value must be positive .");
-                                    return false;
-                                } else {
-                                    i = s.length();
-                                    list.add(so);
-                                }
+//    public boolean checkRoom(String s) {
+//        List<Double> list = new ArrayList<>();
+//        List<Cordination> listP = new ArrayList<>();
+//        int i = 0;
+//        while (i < s.length()) {
+//            int count = list.size();
+//            if (s.charAt(i) == '(') {
+//                int j = i;
+//                while ((j < s.length()) && (s.charAt(j) != ')')) {
+//                    if (s.charAt(j) == ',') {
+//                        String x = s.substring(i + 1, j);
+//                        try {
+//                            double so = Double.parseDouble(x);
+//                            if (so < 0) {
+//                                System.out.println("Error, the value must be positive .");
+//                                return false;
+//                            } else {
+//                                i = j + 1;
+//                                list.add(so);
+//                            }
+//                        } catch (Exception NumberFormatException) {
+//                            System.out.println("Error coordination! ");
+//                            return false;
+//                        }
+//                    } else if ((s.charAt(j + 1) == ')')) {
+//                        if (j + 2 >= s.length()) {
+//                            String x = s.substring(i + 1, j + 1);
+//                            try {
+//                                double so = Double.parseDouble(x);
+//                                if (so < 0) {
+//                                    System.out.println("Error, the value must be positive .");
+//                                    return false;
+//                                } else {
+//                                    i = s.length();
+//                                    list.add(so);
+//                                }
+//
+//                            } catch (Exception NumberFormatException) {
+//                                System.out.println("Error coordination! ");
+//                                return false;
+//                            }
+//                        } else if (s.charAt(j + 2) == ' ') {
+//                            String x = s.substring(i + 1, j + 1);
+//                            try {
+//                                double so = Double.parseDouble(x);
+//                                if (so < 0) {
+//                                    System.out.println("Error, the value must be positive .");
+//                                    return false;
+//                                } else {
+//                                    i = j + 3;
+//                                    list.add(so);
+//                                }
+//
+//                            } catch (Exception NumberFormatException) {
+//                                System.out.println("Error coordination! ");
+//                                return false;
+//                            }
+//                        }
+//                    }
+//                    j++;
+//                }
+//                if (list.size() - count == 3) {
+//                    Cordination po = new Cordination(list.get(count), list.get(count + 1), list.get(count + 2));
+//                    listP.add(po);
+//                    continue;
+//                } else {
+//                    System.out.println("error ! ");
+//                    return false;
+//                }
+//            }
+//            i++;
+//        }
+//        // check du 8 toa do dinh hay khong
+//        if (listP.size() != 8) {
+//            return false;
+//        }
+//        // kiem tra co ton tai mot diem la goc toa do hay khong
+//        int check = 0;
+//        for (Cordination x : listP) {
+//            if (x.getX() == 0 && x.getY() == 0 && x.getZ() == 0) {
+//                check++;
+//            }
+//        }
+//        if (check != 1) {
+//            return false;
+//        }
+//        Characteristics room = new Characteristics();
+//        for (Cordination cordination : listP) {
+//            {
+//                if (cordination.getX() == 0 && cordination.getY() == 0 && cordination.getZ() == 0) {
+//                    // quy uoc A la goc toa do
+//                    room.pointA.setX(cordination.getX());
+//                    room.pointA.setY(cordination.getY());
+//                    room.pointA.setZ(cordination.getZ());
+//                }
+//                if (room.getPointA().getX() == cordination.getX() && room.getPointA().getY() == cordination.getY() && room.getPointA().getZ() != cordination.getZ()) {
+//                    // quy uoc A1 khac A ve z
+//                    room.pointA1.setX(cordination.getX());
+//                    room.pointA1.setY(cordination.getY());
+//                    room.pointA1.setZ(cordination.getZ());
+//                }
+//                if (cordination.getX() == 0 && cordination.getY() != 0 && cordination.getZ() == 0) {
+//                    // quy uoc B nam tren truc OY
+//                    room.pointB.setX(cordination.getX());
+//                    room.pointB.setY(cordination.getY());
+//                    room.pointB.setZ(cordination.getZ());
+//                }
+//                if (room.getPointB().getX() == cordination.getX() && room.getPointB().getY() == cordination.getY() && room.getPointB().getZ() != cordination.getZ()) {
+//                    // quy uoc B1
+//                    room.pointB1.setX(cordination.getX());
+//                    room.pointB1.setY(cordination.getY());
+//                    room.pointB1.setZ(cordination.getZ());
+//                }
+//                if (cordination.getX() != 0 && cordination.getY() != 0 && cordination.getZ() == 0) {
+//                    // quy uoc C nam tren mat OXY
+//                    room.pointC.setX(cordination.getX());
+//                    room.pointC.setY(cordination.getY());
+//                    room.pointC.setZ(cordination.getZ());
+//                }
+//                if (cordination.getX() == room.getPointC().getX() && cordination.getY() == room.getPointC().getY() && room.getPointC().getZ() != cordination.getZ()) {
+//                    // quy uoc C1
+//                    room.pointC1.setX(cordination.getX());
+//                    room.pointC1.setY(cordination.getY());
+//                    room.pointC1.setZ(cordination.getZ());
+//                }
+//                if (cordination.getX() != 0 && cordination.getY() == 0 && cordination.getZ() == 0) {
+//                    // quy uoc D nam tren truc OX
+//                    room.pointD.setX(cordination.getX());
+//                    room.pointD.setY(cordination.getY());
+//                    room.pointD.setZ(cordination.getZ());
+//                }
+//                if (cordination.getX() == room.getPointD().getX() && cordination.getY() == room.getPointD().getY() && room.getPointD().getZ() != cordination.getZ()) {
+//                    // quy uoc D1
+//                    room.pointD1.setX(cordination.getX());
+//                    room.pointD1.setY(cordination.getY());
+//                    room.pointD1.setZ(cordination.getZ());
+//                }
+//            }
+//        }
+//
+//        if (room.getPointA1().getZ() != room.getPointB1().getZ() || room.getPointA1().getZ() != room.getPointC1().getZ()
+//                || room.getPointA1().getZ() != room.getPointD1().getZ()) {
+//            return false;
+//        } else {
+//            Calculate calculate = new Calculate();
+//            if (calculate.checkRectangle(room.pointA, room.pointB, room.pointC, room.pointD)) {
+//                objectsList.add(room);
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        }
+//    }
 
-                            } catch (Exception NumberFormatException) {
-                                System.out.println("Error coordination! ");
-                                return false;
-                            }
-                        } else if (s.charAt(j + 2) == ' ') {
-                            String x = s.substring(i + 1, j + 1);
-                            try {
-                                double so = Double.parseDouble(x);
-                                if (so < 0) {
-                                    System.out.println("Error, the value must be positive .");
-                                    return false;
-                                } else {
-                                    i = j + 3;
-                                    list.add(so);
-                                }
+//    public boolean checkObject(String s, Calculate obj) {
+//        List<Double> list = new ArrayList<>();
+//        List<Cordination> listP = new ArrayList<>();
+//        List<Map> listDistance = new ArrayList<>();
+//        int i = 0;
+//        while (i < s.length()) {
+//            int count = list.size();
+//            if (s.charAt(i) == '(') {
+//                int j = i;
+//                while ((j < s.length()) && (s.charAt(j) != ')')) {
+//                    if (s.charAt(j) == ',') {
+//                        String x = s.substring(i + 1, j);
+//                        try {
+//                            double so = Double.parseDouble(x);
+//                            if (so < 0) {
+//                                System.out.println("Error, the value must be positive .");
+//                                return false;
+//
+//                            } else {
+//                                i = j + 1;
+//                                list.add(so);
+//                            }
+//                        } catch (Exception NumberFormatException) {
+//                            System.out.println("Error coordination! ");
+//                            return false;
+//                        }
+//                    } else if ((s.charAt(j + 1) == ')')) {
+//                        if (j + 2 >= s.length()) {
+//                            String x = s.substring(i + 1, j + 1);
+//                            try {
+//                                double so = Double.parseDouble(x);
+//                                if (so < 0) {
+//                                    System.out.println("Error, the value must be positive .");
+//                                    return false;
+//                                } else {
+//                                    i = s.length();
+//                                    list.add(so);
+//                                }
+//
+//                            } catch (Exception NumberFormatException) {
+//                                System.out.println("Error coordination! ");
+//                                return false;
+//                            }
+//                        } else if (s.charAt(j + 2) == ' ') {
+//                            String x = s.substring(i + 1, j + 1);
+//                            try {
+//                                double so = Double.parseDouble(x);
+//                                if (so < 0) {
+//                                    System.out.println("Error, the value must be positive .");
+//                                    return false;
+//                                } else {
+//                                    i = j + 3;
+//                                    list.add(so);
+//                                }
+//
+//                            } catch (Exception NumberFormatException) {
+//                                System.out.println("Error coordination! ");
+//                                return false;
+//                            }
+//                        }
+//                    }
+//                    j++;
+//                }
+//                if (list.size() - count == 3) {
+//                    Cordination po = new Cordination(list.get(count), list.get(count + 1), list.get(count + 2));
+//                    listP.add(po);
+//                    continue;
+//                } else {
+//                    System.out.println("error ! ");
+//                    return false;
+//                }
+//            }
+//            i++;
+//        }
+//        // check de tim ra 4 diem co khoang cach den mat san nho nhat de xac dinh day ABCD
 
-                            } catch (Exception NumberFormatException) {
-                                System.out.println("Error coordination! ");
-                                return false;
-                            }
-                        }
-                    }
-                    j++;
-                }
-                if (list.size() - count == 3) {
-                    Cordination po = new Cordination(list.get(count), list.get(count + 1), list.get(count + 2));
-                    listP.add(po);
-                    continue;
-                } else {
-                    System.out.println("error ! ");
-                    return false;
-                }
-            }
-            i++;
-        }
-        // check du 8 toa do dinh hay khong
-        if (listP.size() != 8) {
-            return false;
-        }
-        // kiem tra co ton tai mot diem la goc toa do hay khong
-        int check = 0;
-        for (Cordination x : listP) {
-            if (x.getX() == 0 && x.getY() == 0 && x.getZ() == 0) {
-                check++;
-            }
-        }
-        if (check != 1) {
-            return false;
-        }
-        Characteristics room = new Characteristics();
-        for (Cordination cordination : listP) {
-            {
-                if (cordination.getX() == 0 && cordination.getY() == 0 && cordination.getZ() == 0) {
-                    // quy uoc A la goc toa do
-                    room.pointA.setX(cordination.getX());
-                    room.pointA.setY(cordination.getY());
-                    room.pointA.setZ(cordination.getZ());
-                }
-                if (room.getPointA().getX() == cordination.getX() && room.getPointA().getY() == cordination.getY() && room.getPointA().getZ() != cordination.getZ()) {
-                    // quy uoc A1 khac A ve z
-                    room.pointA1.setX(cordination.getX());
-                    room.pointA1.setY(cordination.getY());
-                    room.pointA1.setZ(cordination.getZ());
-                }
-                if (cordination.getX() == 0 && cordination.getY() != 0 && cordination.getZ() == 0) {
-                    // quy uoc B nam tren truc OY
-                    room.pointB.setX(cordination.getX());
-                    room.pointB.setY(cordination.getY());
-                    room.pointB.setZ(cordination.getZ());
-                }
-                if (room.getPointB().getX() == cordination.getX() && room.getPointB().getY() == cordination.getY() && room.getPointB().getZ() != cordination.getZ()) {
-                    // quy uoc B1
-                    room.pointB1.setX(cordination.getX());
-                    room.pointB1.setY(cordination.getY());
-                    room.pointB1.setZ(cordination.getZ());
-                }
-                if (cordination.getX() != 0 && cordination.getY() != 0 && cordination.getZ() == 0) {
-                    // quy uoc C nam tren mat OXY
-                    room.pointC.setX(cordination.getX());
-                    room.pointC.setY(cordination.getY());
-                    room.pointC.setZ(cordination.getZ());
-                }
-                if (cordination.getX() == room.getPointC().getX() && cordination.getY() == room.getPointC().getY() && room.getPointC().getZ() != cordination.getZ()) {
-                    // quy uoc C1
-                    room.pointC1.setX(cordination.getX());
-                    room.pointC1.setY(cordination.getY());
-                    room.pointC1.setZ(cordination.getZ());
-                }
-                if (cordination.getX() != 0 && cordination.getY() == 0 && cordination.getZ() == 0) {
-                    // quy uoc D nam tren truc OX
-                    room.pointD.setX(cordination.getX());
-                    room.pointD.setY(cordination.getY());
-                    room.pointD.setZ(cordination.getZ());
-                }
-                if (cordination.getX() == room.getPointD().getX() && cordination.getY() == room.getPointD().getY() && room.getPointD().getZ() != cordination.getZ()) {
-                    // quy uoc D1
-                    room.pointD1.setX(cordination.getX());
-                    room.pointD1.setY(cordination.getY());
-                    room.pointD1.setZ(cordination.getZ());
-                }
-            }
-        }
+//        double Z = object.getPointA().getZ();
+//        if ( Z <= 0 || object.getPointB1().getZ() != Z && object.getPointC1().getZ() != Z && object.getPointD1().getZ() != Z ) {
+//            System.out.println( " vao day hay khong noi mot loi");
+//            return false;
+//        } else {
+//            System.out.println(" da zo day thu lan 0");
+//            // check hcn
+//            if (checkRectangle(object.getPointA(), object.getPointB(), object.getPointC(), object.getPointD())) {
+//                System.out.println(" co zo day roi lan 1" );
+//                obj.objectsList.add(object);
+//                int index = obj.objectsList.indexOf(object);
+//                int check = checkInRoom(obj, index);
+//                if(check == 1) {
+//                    System.out.println(" vat nay dung that la nam tren san roi");
+//                    return true;
+//                }
+//                else if(check == 2)
+//                {
+//                    System.out.println(" vat nay nam tren vat khac");
+//                    return true;
+//                }
+//                else {
+//                    obj.objectsList.remove(object);
+//                    return false;
+//                }
+//
+//            } else {
+//                System.out.println(" ko phai hcn");
+//                return false;
+//            }
+//        }
+//    }
+    public boolean checkPointInObject(Cordination point, Calculate obj){
+        Calculate calculate = new Calculate();
+        Cordination vectorABCD = calculate.makeVectorN(obj.getPointA(),obj.getPointB(),obj.getPointC());
+        Cordination vectorABB1A1 = calculate.makeVectorN(obj.getPointA(),obj.getPointB(),obj.getPointA1());
+        Cordination vectorA1B1C1D1 = calculate.makeVectorN(obj.getPointA1(),obj.getPointB1(),obj.getPointC1());
+        Cordination vectorC1D1DC = calculate.makeVectorN(obj.getPointC1(),obj.getPointD1(),obj.getPointC());
+        Cordination vectorADD1A1 = calculate.makeVectorN(obj.getPointA(),obj.getPointD1(),obj.getPointA1());
+        Cordination vectorBCC1B1 = calculate.makeVectorN(obj.getPointC1(),obj.getPointB(),obj.getPointC());
 
-        if (room.getPointA1().getZ() != room.getPointB1().getZ() || room.getPointA1().getZ() != room.getPointC1().getZ()
-                || room.getPointA1().getZ() != room.getPointD1().getZ()) {
-            return false;
-        } else {
-            Calculate calculate = new Calculate();
-            if (calculate.checkRectangle(room.pointA, room.pointB, room.pointC, room.pointD)) {
-                objectsList.add(room);
-                return true;
-            } else {
-                return false;
-            }
+        double distancePToABCD = calculate.distance(point,vectorABCD,obj.getPointA());
+        double distancePToABB1A1 = calculate.distance(point,vectorABB1A1,obj.getPointA());
+        double distancePToA1B1C1D1 = calculate.distance(point,vectorA1B1C1D1,obj.getPointA1());
+        double distancePToC1D1DC = calculate.distance(point,vectorC1D1DC,obj.getPointC());
+        double distancePToADD1A1 = calculate.distance(point,vectorADD1A1,obj.getPointA());
+        double distancePToBCC1B1 = calculate.distance(point,vectorBCC1B1,obj.getPointB());
+
+        double volumePABCD = distancePToABCD*calculate.square(obj.getPointA(), obj.getPointB(), obj.getPointC());
+        double volumePA1B1C1D1 = distancePToA1B1C1D1*calculate.square(obj.getPointA1(), obj.getPointB1(), obj.getPointC1());
+        double volumePABB1A1 = distancePToABB1A1*calculate.square(obj.getPointA(), obj.getPointB(), obj.getPointB1());
+        double volumePCDD1C1 = distancePToC1D1DC*calculate.square(obj.getPointC(), obj.getPointD(), obj.getPointC1());
+        double volumePADD1A1 = distancePToADD1A1*calculate.square(obj.getPointA(), obj.getPointA1(), obj.getPointD());
+        double volumePBCC1B1 = distancePToBCC1B1*calculate.square(obj.getPointB(), obj.getPointC(), obj.getPointC1());
+
+        double height = calculate.distancePointAB(obj.getPointA(),obj.getPointA1());
+        double volumeObj = height*square(obj.getPointA(),obj.getPointB(),obj.getPointC());
+        if (volumeObj == volumePA1B1C1D1 + volumePABCD +volumePABB1A1 +volumePADD1A1 +volumePBCC1B1 +volumePCDD1C1){
+            return true;
+        }else {
+            return  false;
         }
     }
-
-    public boolean checkObject(String s, Calculate obj) {
-        List<Double> list = new ArrayList<>();
-        List<Cordination> listP = new ArrayList<>();
-        List<Map> listDistance = new ArrayList<>();
-        int i = 0;
-        while (i < s.length()) {
-            int count = list.size();
-            if (s.charAt(i) == '(') {
-                int j = i;
-                while ((j < s.length()) && (s.charAt(j) != ')')) {
-                    if (s.charAt(j) == ',') {
-                        String x = s.substring(i + 1, j);
-                        try {
-                            double so = Double.parseDouble(x);
-                            if (so < 0) {
-                                System.out.println("Error, the value must be positive .");
-                                return false;
-
-                            } else {
-                                i = j + 1;
-                                list.add(so);
-                            }
-                        } catch (Exception NumberFormatException) {
-                            System.out.println("Error coordination! ");
-                            return false;
-                        }
-                    } else if ((s.charAt(j + 1) == ')')) {
-                        if (j + 2 >= s.length()) {
-                            String x = s.substring(i + 1, j + 1);
-                            try {
-                                double so = Double.parseDouble(x);
-                                if (so < 0) {
-                                    System.out.println("Error, the value must be positive .");
-                                    return false;
-                                } else {
-                                    i = s.length();
-                                    list.add(so);
-                                }
-
-                            } catch (Exception NumberFormatException) {
-                                System.out.println("Error coordination! ");
-                                return false;
-                            }
-                        } else if (s.charAt(j + 2) == ' ') {
-                            String x = s.substring(i + 1, j + 1);
-                            try {
-                                double so = Double.parseDouble(x);
-                                if (so < 0) {
-                                    System.out.println("Error, the value must be positive .");
-                                    return false;
-                                } else {
-                                    i = j + 3;
-                                    list.add(so);
-                                }
-
-                            } catch (Exception NumberFormatException) {
-                                System.out.println("Error coordination! ");
-                                return false;
-                            }
-                        }
-                    }
-                    j++;
-                }
-                if (list.size() - count == 3) {
-                    Cordination po = new Cordination(list.get(count), list.get(count + 1), list.get(count + 2));
-                    listP.add(po);
-                    continue;
-                } else {
-                    System.out.println("error ! ");
-                    return false;
-                }
-            }
-            i++;
-        }
-        // check de tim ra 4 diem co khoang cach den mat san nho nhat de xac dinh day ABCD
-        for (Cordination x : listP) {
-            // tao vector phap tuyen cua mat OXY
-            Cordination vectorN = makeVectorN(objectsList.get(0).getPointA(),
-                    objectsList.get(0).getPointB(), objectsList.get(0).getPointC());
-            // tinh khoang cach tu 8 dinh den mat san
-            double distance = Math.round(distance(x, vectorN, objectsList.get(0).getPointA()));
-            Map temp = new Map(distance, x.getX(), x.getY(), x.getZ());
-            listDistance.add(temp); }
-        sort(listDistance);
-        // lay ra 4 diem co khoang cach nho nhat de xac dinh mat day ABCD cua vat ( thu tu 4 diem la bat ki)
-        // diem A
-        Characteristics object = new Characteristics();
-        object.pointA.setX(listDistance.get(0).getX());
-        object.pointA.setY(listDistance.get(0).getY());
-        object.pointA.setZ(listDistance.get(0).getZ());
-//        System.out.println("A "+ listDistance.get(0).getX());
-//        System.out.println("A "+ listDistance.get(0).getY());
-//        System.out.println("A "+ listDistance.get(0).getZ());
-        // diem B
-        object.pointB.setX(listDistance.get(1).getX());
-        object.pointB.setY(listDistance.get(1).getY());
-        object.pointB.setZ(listDistance.get(1).getZ());
-//        System.out.println("B "+ listDistance.get(1).getX());
-//        System.out.println("B "+ listDistance.get(1).getY());
-//        System.out.println("B "+ listDistance.get(1).getZ());
-        // diem C
-        object.pointC.setX(listDistance.get(2).getX());
-        object.pointC.setY(listDistance.get(2).getY());
-        object.pointC.setZ(listDistance.get(2).getZ());
-//        System.out.println("C "+ listDistance.get(2).getX());
-//        System.out.println("C "+ listDistance.get(2).getY());
-//        System.out.println("C "+ listDistance.get(2).getZ());
-        // diem D
-        object.pointD.setX(listDistance.get(3).getX());
-        object.pointD.setY(listDistance.get(3).getY());
-        object.pointD.setZ(listDistance.get(3).getZ());
-//        System.out.println("D "+ listDistance.get(3).getX());
-//        System.out.println("D "+ listDistance.get(3).getY());
-//        System.out.println("D "+ listDistance.get(3).getZ());
-
-        // lay ra cac diem A1 B1 C1 D1 thong qua cac diem A B C D
-        for (i = 4; i < listP.size(); i++) {
-            if (object.getPointA().getX() == listP.get(i).getX() && object.getPointA().getY() == listP.get(i).getY()
-                    && object.getPointA().getZ() != listP.get(i).getZ()) {
-                object.getPointA1().setX(listP.get(i).getX());
-                object.getPointA1().setY(listP.get(i).getY());
-                object.getPointA1().setZ(listP.get(i).getZ());
-                System.out.println( " A1 : "+ listP.get(i).getX());
-                System.out.println( " A1 : "+ listP.get(i).getY());
-                System.out.println( " A1 : "+ listP.get(i).getZ());
-
-            }
-            if (object.getPointB().getX() == listP.get(i).getX() && object.getPointB().getY() == listP.get(i).getY()
-                    && object.getPointB().getZ() != listP.get(i).getZ()) {
-                object.getPointB1().setX(listP.get(i).getX());
-                object.getPointB1().setY(listP.get(i).getY());
-                object.getPointB1().setZ(listP.get(i).getZ());
-                System.out.println( " B1 : "+ listP.get(i).getX());
-                System.out.println( " B1 : "+ listP.get(i).getY());
-                System.out.println( " B1 : "+ listP.get(i).getZ());
-            }
-            if (object.getPointC().getX() == listP.get(i).getX() && object.getPointC().getY() == listP.get(i).getY()
-                    && object.getPointC().getZ() != listP.get(i).getZ()) {
-                object.getPointC1().setX(listP.get(i).getX());
-                object.getPointC1().setY(listP.get(i).getY());
-                object.getPointC1().setZ(listP.get(i).getZ());
-                System.out.println( " C1 : "+ listP.get(i).getX());
-                System.out.println( " C1 : "+ listP.get(i).getY());
-                System.out.println( " C1 : "+ listP.get(i).getZ());
-            }
-            if (object.getPointD().getX() == listP.get(i).getX() && object.getPointD().getY() == listP.get(i).getY()
-                    && object.getPointD().getZ() != listP.get(i).getZ()) {
-                object.getPointD1().setX(listP.get(i).getX());
-                object.getPointD1().setY(listP.get(i).getY());
-                object.getPointD1().setZ(listP.get(i).getZ());
-                System.out.println( " D1 : "+ listP.get(i).getX());
-                System.out.println( " D1 : "+ listP.get(i).getY());
-                System.out.println( " D1 : "+ listP.get(i).getZ());
-            }
-        }
-        double Z = object.getPointA().getZ();
-        if ( Z <= 0 || object.getPointB1().getZ() != Z && object.getPointC1().getZ() != Z && object.getPointD1().getZ() != Z ) {
-            System.out.println( " vao day hay khong noi mot loi");
-            return false;
-        } else {
-            System.out.println(" da zo day thu lan 0");
-            // check hcn
-            if (checkRectangle(object.getPointA(), object.getPointB(), object.getPointC(), object.getPointD())) {
-                System.out.println(" co zo day roi lan 1" );
-                obj.objectsList.add(object);
-                int index = obj.objectsList.indexOf(object);
-                int check = checkInRoom(obj, index);
-                if(check == 1) {
-                    System.out.println(" vat nay dung that la nam tren san roi");
-                    return true;
-//                    if(checkInObject(obj, index))
-//                    {
-//                        return true;
-//                    }
-//                    else {
-//                        return false;
-//                    }
-                }
-                else if(check == 2)
-                {
-                    System.out.println(" vat nay nam tren vat khac");
-                    return true;
-//                    if(checkInObject(obj, index))
-//                    {
-//                        return true;
-//                    }
-//                    else {
-//                        return false;
-//                    }
-                }
-                else {
-                    obj.objectsList.remove(object);
-                    return false;
-                }
-
-            } else {
-                System.out.println(" ko phai hcn");
-                return false;
-            }
-        }
-    }
-    public boolean checkPointInCamera(Cordination point , Camera camera)
+    public boolean checkPointInCamera(Cordination point , Camera camera )
     {
-        return true;
+        Calculate calculate = new Calculate();
+        if (calculate.checkPointInObject(point, (Calculate) calculate.objectsList.get(0))){
+            double a = Math.round((Math.tan(camera.getSightCorner()/2/180*Math.PI)*camera.getScope())*100) /100.0;
+            if (camera.getX() == 0){
+
+//            System.out.println(a + " " + camera.getY());
+                Cordination po = new Cordination();
+                po.setX(camera.getX()+camera.getScope());
+                po.setY(camera.getY() - a);
+//            System.out.println(camera.getY()-a + " " + po.getY());
+                po.setZ(camera.getZ() + a);
+                camera.setPointA(po);
+//            System.out.println(po.toString());
+//
+                po.setZ(camera.getZ()-a);
+                camera.setPointB(po);
+//            System.out.println(camera.getPointB().toString());
+
+                po.setY(camera.getY()+a);
+                camera.setPointC(po);
+//            System.out.println(camera.getPointC().toString());
+//
+                po.setZ(camera.getZ()+a);
+                camera.setPointD(po);
+//
+            }
+            if (camera.getY() == 0){
+//            System.out.println(a + " " + camera.getY());
+                Cordination po = new Cordination();
+                po.setX(camera.getX()+a);
+                po.setY(camera.getY() +camera.getScope());
+//            System.out.println(camera.getY()-a + " " + po.getY());
+                po.setZ(camera.getZ() + a);
+                camera.setPointA(po);
+//            System.out.println(po.toString());
+//
+                po.setZ(camera.getZ()-a);
+                camera.setPointB(po);
+//            System.out.println(camera.getPointB().toString());
+
+                po.setX(camera.getX()-a);
+                camera.setPointC(po);
+//            System.out.println(camera.getPointC().toString());
+//
+                po.setZ(camera.getZ()+a);
+                camera.setPointD(po);
+            }
+
+            Cordination vectorCamAB = calculate.makeVectorN(camera,camera.getPointA(),camera.getPointB());
+            Cordination vectorCamBC = calculate.makeVectorN(camera,camera.getPointB() ,camera.getPointC());
+            Cordination vectorCamCD = calculate.makeVectorN(camera,camera.getPointC(),camera.getPointD());
+            Cordination vectorCamDA = calculate.makeVectorN(camera,camera.getPointD(),camera.getPointA());
+            Cordination vectorABCD = calculate.makeVectorN(camera.getPointA(),camera.getPointB(),camera.getPointC());
+
+            double distancePToCamAB = calculate.distance(point,vectorCamAB,camera);
+            double distancePToCamBC = calculate.distance(point,vectorCamBC,camera);
+            double distancePToCamCD = calculate.distance(point,vectorCamCD,camera);
+            double distancePToCamDA = calculate.distance(point,vectorCamDA,camera);
+            double distancePToABCD = calculate.distance(point,vectorABCD,camera);
+
+            double volumeCamAB = distancePToCamAB*calculate.triangle(camera,camera.getPointA(),camera.getPointB());
+            double volumeCamBC = distancePToCamBC*calculate.triangle(camera,camera.getPointB(),camera.getPointC());
+            double volumeCamCD = distancePToCamCD*calculate.triangle(camera,camera.getPointC(),camera.getPointD());
+            double volumeCamDA = distancePToCamDA*calculate.triangle(camera,camera.getPointD(),camera.getPointA());
+            double volumePABCD = distancePToABCD*calculate.square(camera.getPointA(),camera.getPointB(),camera.getPointC());
+            double volumeCamABCD = camera.getScope() * square(camera.getPointA(),camera.getPointB(),camera.getPointC());
+            if (volumeCamAB + volumeCamBC + volumeCamCD + volumeCamDA + volumePABCD == volumeCamABCD){
+                return true;
+            }
+            return false;
+        }else return false;
     }
+    public void setParameter() {
+        setLength(distancePointAB(pointA, pointB));
+        setWidth(distancePointAB(pointA, pointD));
+        setHeight(distancePointAB(pointA, pointA1));
+    }
+    public void printParameters() {
+        System.out.println("Point A: (" + this.getPointA().getX() + ", " + this.getPointA().getY() + ", " + this.getPointA().getZ() + ")");
+        System.out.println("Point B: (" + this.getPointB().getX() + ", " + this.getPointB().getY() + ", " + this.getPointB().getZ() + ")");
+        System.out.println("Point C: (" + this.getPointC().getX() + ", " + this.getPointC().getY() + ", " + this.getPointC().getZ() + ")");
+        System.out.println("Point D: (" + this.getPointD().getX() + ", " + this.getPointD().getY() + ", " + this.getPointD().getZ() + ")");
+        System.out.println("Point A1: (" + this.getPointA1().getX() + ", " + this.getPointA1().getY() + ", " + this.getPointA1().getZ() + ")");
+        System.out.println("Point B1: (" + this.getPointB1().getX() + ", " + this.getPointB1().getY() + ", " + this.getPointB1().getZ() + ")");
+        System.out.println("Point C1: (" + this.getPointC1().getX() + ", " + this.getPointC1().getY() + ", " + this.getPointC1().getZ() + ")");
+        System.out.println("Point D1: (" + this.getPointD1().getX() + ", " + this.getPointD1().getY() + ", " + this.getPointD1().getZ() + ")");
+        System.out.println("Length: " + getLength());
+        System.out.println("Width: " + getWidth());
+        System.out.println("Height: " + getHeight());
+    }
+
 }
